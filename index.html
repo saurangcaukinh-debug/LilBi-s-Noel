@@ -115,10 +115,7 @@
             const canvas = document.createElement('canvas');
             canvas.width = 128; canvas.height = 128;
             const ctx = canvas.getContext('2d');
-            // ===== SYNC SIZE CAMERA CANVAS =====
-            canvas.width  = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
-
+        
             const cx = 64, cy = 64;
 
             if (type === 'gold_glow') {
