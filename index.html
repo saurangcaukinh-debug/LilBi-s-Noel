@@ -40,12 +40,28 @@
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
 
         /* Camera Preview Vandiep */
-        #camera-preview {
-            position: absolute; top: 15px; right: 15px;
-            width: 120px; height: 90px;
-            border: 2px solid rgba(255,0,0,0.5); 
-            transform: scaleX(-1); opacity: 0.6; border-radius: 8px;
+       #camera-preview {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+
+            width: min(28vw, 300px);
+            height: calc(min(28vw, 300px) * 0.75);
+
+            border: 2px solid rgba(255, 0, 0, 0.6);
+            border-radius: 14px;
+
+            transform: scaleX(-1);
+            opacity: 0.85;
+
+            box-shadow:
+                0 0 12px rgba(255, 0, 0, 0.4),
+                0 0 30px rgba(255, 215, 0, 0.25);
+
+            background: black;
+            z-index: 50;
         }
+
         
         /* Vandiep */
         #copyright {
@@ -99,6 +115,10 @@
             const canvas = document.createElement('canvas');
             canvas.width = 128; canvas.height = 128;
             const ctx = canvas.getContext('2d');
+            // ===== SYNC SIZE CAMERA CANVAS =====
+            canvas.width  = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
             const cx = 64, cy = 64;
 
             if (type === 'gold_glow') {
@@ -486,7 +506,8 @@
             hands.setOptions({ maxNumHands: 2, modelComplexity: 1, minDetectionConfidence: 0.5, minTrackingConfidence: 0.5 });
 
             hands.onResults(results => {
-                ctx.clearRect(0,0,100,75); ctx.drawImage(results.image, 0, 0, 100, 75);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
+
 
                 // --- Hand Logic  ---
                 if (results.multiHandLandmarks.length === 2) {
@@ -526,6 +547,8 @@
 
         window.addEventListener('resize', () => {
             if(camera) { camera.aspect = window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
+            const cam = document.getElementById('camera-preview');
+            if (cam) {cam.width  = cam.offsetWidth;cam.height = cam.offsetHeight;}
         });
     </script>
 </body>
